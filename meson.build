@@ -123,6 +123,8 @@ default_drivers = [
     'upeksonly',
     'upekts',
     'goodixmoc',
+    'goodixtls511',
+    'goodixtls55x4',
     'nb1010',
 
     # SPI
@@ -156,6 +158,8 @@ driver_helper_mapping = {
     'aes4000' : [ 'aeslib', 'aes3k' ],
     'uru4000' : [ 'nss' ],
     'elanspi' : [ 'udev' ],
+    'goodixtls511' : [ 'goodixtls' ],
+    'goodixtls55x4' : [ 'goodixtls' ],
     'virtual_image'          : [ 'virtual' ],
     'virtual_device'         : [ 'virtual' ],
     'virtual_device_storage' : [ 'virtual' ],
@@ -211,6 +215,18 @@ foreach i : driver_helpers
 
         libfprint_conf.set10('HAVE_PIXMAN', true)
         optional_deps += imaging_dep
+    elif i == 'goodixtls'
+        openssl_dep = dependency('openssl', required: false)
+        if not openssl_dep.found()
+            error('openssl is required for @0@ and possibly others'.format(driver))
+        endif
+        optional_deps += openssl_dep
+
+        threads_dep = dependency('threads', required: false)
+        if not threads_dep.found()
+            error('threads is required for @0@ and possibly others'.format(driver))
+        endif
+        optional_deps += threads_dep
     elif i == 'nss'
         nss_dep = dependency('nss', required: false)
         if not nss_dep.found()
