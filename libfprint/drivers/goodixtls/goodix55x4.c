@@ -368,7 +368,7 @@ static void decode_frame(Goodix55X4Pix frame[GOODIX55X4_FRAME_SIZE],
                          const guint8* raw_frame)
 {
 
-    save_image_to_pgm2(raw_frame, "finger3_before.pgm");
+    save_image_to_pgm2((guchar *) raw_frame, "finger3_before.pgm");
     Goodix55X4Pix uncropped[GOODIX55X4_SCAN_WIDTH * GOODIX55X4_HEIGHT];
     Goodix55X4Pix* pix = uncropped;
     for (int i = 0; i < GOODIX55X4_RAW_FRAME_SIZE; i += 6) {
@@ -378,7 +378,7 @@ static void decode_frame(Goodix55X4Pix frame[GOODIX55X4_FRAME_SIZE],
         *pix++ = ((chunk[5] & 0xf) << 8) + chunk[2];
         *pix++ = (chunk[4] << 4) + (chunk[5] >> 4);
     }
-    save_image_to_pgm2(uncropped, "finger3.pgm");
+    save_image_to_pgm2((guchar *) uncropped, "finger3.pgm");
 
     for (int y = 0; y != GOODIX55X4_HEIGHT; ++y) {
         for (int x = 0; x != GOODIX55X4_WIDTH; ++x) {
